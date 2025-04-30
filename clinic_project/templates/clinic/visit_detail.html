@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-body">
+            <h2 class="mb-4">Обращение от {{ visit.date|date:"d.m.Y" }}</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Основные данные</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <strong>Пациент:</strong> {{ visit.patient }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Врач:</strong> {{ visit.doctor }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Диагноз:</strong> {{ visit.diagnosis }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Стоимость:</strong> {{ visit.total_cost }} руб.
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5>Список услуг</h5>
+                    <ul class="list-group">
+                        {% for service in visit.services.all %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            {{ service.name }}
+                            <span class="badge bg-primary">
+                                {{ service.cost }} руб.
+                            </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'visit_list' %}" class="btn btn-secondary">
+                    Назад к списку
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

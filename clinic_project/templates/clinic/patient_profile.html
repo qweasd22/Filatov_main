@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-body">
+            <h2 class="mb-4">Ваш профиль</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Основная информация</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <strong>ФИО:</strong> 
+                            {{ patient.last_name }} 
+                            {{ patient.first_name }} 
+                            {{ patient.middle_name }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Год рождения:</strong> {{ patient.birth_year }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Льготная категория:</strong> 
+                            {{ patient.get_discount_category_display }}
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5>Последние обращения</h5>
+                    <div class="list-group">
+                        {% for visit in patient.visit_set.all|slice:":5" %}
+                        <a href="{% url 'visit_detail' visit.pk %}" 
+                           class="list-group-item list-group-item-action">
+                            {{ visit.date|date:"d.m.Y" }} - {{ visit.doctor }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

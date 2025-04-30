@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2 class="mb-4">Панель администратора</h2>
+    <div class="list-group">
+        <a href="{% url 'patient_list' %}" class="list-group-item list-group-item-action">Управление пациентами</a>
+        <a href="{% url 'doctor_list' %}" class="list-group-item list-group-item-action">Управление врачами</a>
+        <a href="{% url 'visit_list' %}" class="list-group-item list-group-item-action">Все обращения</a>
+    </div>
+{% endblock %}
