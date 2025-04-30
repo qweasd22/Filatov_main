@@ -204,25 +204,17 @@ class VisitCreateView(CreateView):
         return kwargs
 
     def form_valid(self, form):
-        # Автоматическая привязка пациента и создателя
-        if self.request.user.role == 'user':
-            form.instance.patient = self.request.user.patient_profile
+        # Обновляем данные пациента
+        patient = self.request.user.patient_profile
+        patient.last_name = form.cleaned_data['last_name']
+        patient.first_name = form.cleaned_data['first_name']
+        patient.middle_name = form.cleaned_data['middle_name']
+        patient.save()
+
+        # Привязываем пациента к обращению
+        form.instance.patient = patient
         form.instance.created_by = self.request.user
-        
-        # Сохраняем обращение
-        response = super().form_valid(form)
-        
-        # Создаем связи с услугами
-        for service in form.cleaned_data['services']:
-            VisitService.objects.create(
-                visit=self.object,
-                service=service,
-                quantity=1
-            )
-        
-        # Обновляем стоимость
-        self.object.save()
-        return response
+        return super().form_valid(form)
 class VisitListView(ListView):
     def get_queryset(self):
         if self.request.user.role == 'admin':

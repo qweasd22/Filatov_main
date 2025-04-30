@@ -2,6 +2,10 @@ from django import forms
 from .models import Visit, Doctor, Patient, Service
 
 class VisitForm(forms.ModelForm):
+    last_name = forms.CharField(label="Фамилия", max_length=100)
+    first_name = forms.CharField(label="Имя", max_length=100)
+    middle_name = forms.CharField(label="Отчество", max_length=100, required=False)
+
     class Meta:
         model = Visit
         fields = ['doctor', 'date', 'diagnosis', 'services']
@@ -11,13 +15,13 @@ class VisitForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        if user and user.role == 'user':
+        if self.user and self.user.role == 'user':
             self.fields['patient'] = forms.ModelChoiceField(
-                queryset=Patient.objects.filter(user=user),
+                queryset=Patient.objects.filter(user=self.user),
                 widget=forms.HiddenInput(),
-                initial=user.patient_profile
+                initial=self.user.patient_profile
             )
 
 from django import forms

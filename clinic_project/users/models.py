@@ -7,15 +7,9 @@ class CustomUser(AbstractUser):
         ('user', 'Пользователь')
     )
     role = models.CharField(
-        'Роль', 
-        max_length=20, 
-        choices=ROLES, 
+        'Роль',
+        max_length=20,
+        choices=ROLES,
         default='user'
     )
-    patient = models.OneToOneField(
-        'clinic.Patient',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="linked_user"  # Уникальное related_name
-    )
+    birth_year = models.IntegerField('Год рождения')
